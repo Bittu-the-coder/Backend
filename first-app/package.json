@@ -1,0 +1,28 @@
+{
+  "name": "frist-backend",
+  "version": "1.0.0",
+  "description": "A basic app to deploy",
+  "keywords": [
+    "node"
+  ],
+  "homepage": "https://github.com/Bittu-the-coder/Backend#readme",
+  "bugs": {
+    "url": "https://github.com/Bittu-the-coder/Backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bittu-the-coder/Backend.git"
+  },
+  "license": "ISC",
+  "author": "bittu pajapati",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2"
+  }
+}
