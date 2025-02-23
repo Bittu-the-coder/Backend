@@ -4,9 +4,16 @@
   "description": "a backend at chai aur code",
   "license": "ISC",
   "author": "Bittu prajapati",
-  "type": "commonjs",
+  "type": "module",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  },
+  "dependencies": {
+    "prettier": "^3.5.2"
   }
 }

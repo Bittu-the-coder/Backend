@@ -40,7 +40,7 @@ app.get("/api/jokes", (req, res) => {
   res.send(jokes);
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3034;
 app.listen(port, () => {
   console.log(`Server running on port http://localhost:${port}`);
 });
