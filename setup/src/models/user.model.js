@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   },
-  fullname: {
+  fullName: {
     type: String,
     required: true,
     trim: true,
@@ -64,7 +64,14 @@ userSchema.methods.matchPassword = async function (enteredPassword) {
 }
 
 userSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id, email: this.email, username: this.username, fullname: this.fullname }, process.env.ACCESS_TOKEN_SECRET, {
+  return jwt.sign(
+    {
+      id: this._id,
+      email: this.email,
+      username: this.username,
+      fullName: this.fullName
+    },
+    process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: process.env.ACCESS_TOKEN_EXPIRE,
   });
 }
