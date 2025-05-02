@@ -3,9 +3,9 @@ const app = express();
 
 app.use(express.static("dist", { index: "index.html" }));
 
-// app.get("/", (req, res) => {
-//   res.send("Server is ready");
-// });
+app.get("/", (req, res) => {
+  res.send("Server is ready");
+});
 
 //get a list of 5 jokes
 

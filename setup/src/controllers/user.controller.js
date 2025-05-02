@@ -18,12 +18,12 @@ const registerUser = asyncHandler(async (req, res) => {
   console.log(fullName, username, email, password);
 
   if ([fullName, username, email, password].some((field) => field?.trim() === "")) {
-    throw new Error("All fields are required");
-  } else if (password.length < 6) {
+    throw new ApiError(400, "All fields are required");
+  } else if (typeof password !== "string" || password.length < 6) {
     throw new Error("Password must be at least 6 characters");
   } else if (username.length < 3) {
     throw new Error("Username must be at least 3 characters");
-  } else if (email.contains("@") && email.length > 5) {
+  } else if (!email.includes("@") || email.length < 5) {
     throw new Error("Invalid email address");
   }
 
@@ -32,15 +32,24 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new ApiError(409, "User already exists");
   }
 
-  const avatarLocationPath = req.files?.avatar[0].path;
-  const coverPhotoLocationPath = req.files?.coverPhoto[0].path;
+  // Validate files exist
+  const avatarLocalPath = req.files?.["avatar"]?.[0]?.path;
+  const coverImageLocalPath = req.files?.["coverImage"]?.[0]?.path;
 
-  if (!avatarLocationPath || !coverPhotoLocationPath) {
-    throw new ApiError(400, "Avatar and cover photo are required");
+  if (!avatarLocalPath) {
+    throw new ApiError(400, "Avatar file is required");
   }
 
-  const avatar = await uploadOnCloudinary(avatarLocationPath);
-  const coverPhoto = await uploadOnCloudinary(coverPhotoLocationPath);
+  // Upload to cloudinary
+  const avatar = await uploadOnCloudinary(avatarLocalPath);
+  if (!avatar) {
+    throw new ApiError(400, "Avatar file upload failed");
+  }
+
+  let coverImage;
+  if (coverImageLocalPath) {
+    coverImage = await uploadOnCloudinary(coverImageLocalPath);
+  }
 
   const user = await User.create({
     fullName,
@@ -48,7 +57,7 @@ const registerUser = asyncHandler(async (req, res) => {
     email,
     password,
     avatar: avatar.url,
-    coverImage: coverPhoto?.url || "",
+    coverImage: coverImage?.url || "",
   });
 
   const createdUser = await User.findById(user._id).select("-password -refreshToken").then((user) => {
@@ -58,9 +67,6 @@ const registerUser = asyncHandler(async (req, res) => {
   return res.status(201).json(
     new ApiResponse(201, "User created successfully", createdUser)
   );
-
-
-
 });
 
 export { registerUser }
